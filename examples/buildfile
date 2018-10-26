@@ -1,4 +1,4 @@
-./: exe{*}
+# ./: exe{*}
 
 # Flags
 #
@@ -27,16 +27,19 @@ obj{CatchMainTeamCity}: cxx.poptions += "-I$src_root"
 #
 exe{*} : install = false
 
-exe{010-TestCase} : cxx{010-TestCase}
-exe{231-Cfg-OutputStreams} : cxx{231-Cfg-OutputStreams}
+exe{010-TestCase}: cxx{010-TestCase}
+exe{231-Cfg-OutputStreams}: cxx{231-Cfg-OutputStreams}
 exe{020-TestCase}: cxx{020-TestCase-1}
+./: exe{010-TestCase} exe{231-Cfg-OutputStreams} exe{020-TestCase}
 
 obj{207-Rpt-TeamCityReporter}: cxx{207-Rpt-TeamCityReporter}
 exe{207-Rpt-TeamCityReporter}: obj{207-Rpt-TeamCityReporter} obj{CatchMainTeamCity}
+./: exe{207-Rpt-TeamCityReporter}
 
 for t : cxx{ 030-Asn-Require-Check 100-Fix-Section 110-Fix-ClassFixture 120-Bdd-ScenarioGivenWhenThen 210-Evt-EventListeners }
 {
   n = $name($t)
+  ./ : exe{$n}
   obj{$n}: $t
   exe{$n}: obj{$n} obj{CatchMain}
 }
