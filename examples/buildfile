@@ -20,8 +20,8 @@ else
 # 
 obj{CatchMain}: cxx{000-CatchMain}
 obj{CatchMainTeamCity}: cxx{200-Rpt-CatchMain}
-obj{CatchMainTeamCity}: cxx.poptions = "-DCATCH_EXAMPLE_RPT_1=\"include/reporters/catch_reporter_teamcity.hpp\""
-
+obj{CatchMainTeamCity}: cxx.poptions += "-DCATCH_EXAMPLE_RPT_1=\"include/reporters/catch_reporter_teamcity.hpp\""
+obj{CatchMainTeamCity}: cxx.poptions += "-I$src_root"
 
 # Examples
 #
