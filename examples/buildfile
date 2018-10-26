@@ -1,0 +1,43 @@
+./: exe{*}
+
+# Flags
+#
+cxx.poptions += "-I$src_root/single_include"
+if (cxx.class == 'msvc')
+{
+  cxx.coptions += "/W4" "/w44265" "WX"
+}
+else 
+{
+  cxx.coptions += "-Wall" "-Wextra" "-Wunreachable-code"
+  if (cxx.class == 'clang')
+    cxx.coptions += "-Wweak-vtables" "-Wexit-time-destructors" \
+                  "-Wglobal-constructors" "-Wmissing-noreturn"
+}
+
+
+# Catch2
+# 
+obj{CatchMain}: cxx{000-CatchMain}
+obj{CatchMainTeamCity}: cxx{200-Rpt-CatchMain}
+obj{CatchMainTeamCity}: cxx.poptions = "-DCATCH_EXAMPLE_RPT_1=\"include/reporters/catch_reporter_teamcity.hpp\""
+
+
+# Examples
+#
+exe{*} : install = false
+
+exe{010-TestCase} : cxx{010-TestCase}
+exe{231-Cfg-OutputStreams} : cxx{231-Cfg-OutputStreams}
+exe{020-TestCase}: cxx{020-TestCase-1}
+
+obj{207-Rpt-TeamCityReporter}: cxx{207-Rpt-TeamCityReporter}
+exe{207-Rpt-TeamCityReporter}: obj{207-Rpt-TeamCityReporter} obj{CatchMainTeamCity}
+
+for t : cxx{ 030-Asn-Require-Check 100-Fix-Section 110-Fix-ClassFixture 120-Bdd-ScenarioGivenWhenThen 210-Evt-EventListeners }
+{
+  n = $name($t)
+  obj{$n}: $t
+  exe{$n}: obj{$n} obj{CatchMain}
+}
+
