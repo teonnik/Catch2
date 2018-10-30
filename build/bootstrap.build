@@ -1,4 +1,4 @@
-project = Catch2
+project = catch2
 
 using version
 using config
